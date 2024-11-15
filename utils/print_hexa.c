@@ -10,16 +10,16 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "printf.h"
+#include "ft_printf.h"
 
-void	print_hexa(unsigned long n, char *base)
+static void	recursive_print_hexa(unsigned long n, char *base)
 {
 	if (n >= 16)
 		print_hexa(n / 16, base);
 	write(1, &base[n % 16], 1);
 }
 
-int	count_hexa(unsigned long n)
+static int	count_hexa(unsigned long n)
 {
 	int count;
 
@@ -32,7 +32,7 @@ int	count_hexa(unsigned long n)
 	return (count);
 }
 
-int	preprint_hexa(int n, char c)
+int	print_hexa(int n, char c)
 {
 	int count;
 	unsigned long nb;
@@ -55,9 +55,9 @@ int	preprint_hexa(int n, char c)
 	}
 	count += count_hexa(nb);
 	if (c == 'x')
-		print_hexa(nb, "0123456789abcdef");
+		recursive_print_hexa(nb, "0123456789abcdef");
 	else if (c == 'X')
-		print_hexa(nb, "0123456789ABCDEF");
+		recursive_print_hexa(nb, "0123456789ABCDEF");
 	return (count);
 }
 
@@ -69,7 +69,7 @@ int	void_to_hexa(void *p)
 	i = (unsigned long)p;
 	write(1, "0x", 2);
 	count = 2 + count_hexa(i);
-	print_hexa(i, "0123456789abcdef");
+	recursive_print_hexa(i, "0123456789abcdef");
 	return (count);
 }
 

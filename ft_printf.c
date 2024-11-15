@@ -10,6 +10,8 @@
 /*                                                                            */
 /* ************************************************************************** */
 
+#include "ft_printf.h"
+
 static int	format_specifier(char c, va_list args)
 {
 	if (c == 'c')
@@ -17,15 +19,13 @@ static int	format_specifier(char c, va_list args)
 	else if (c == 's')
 		return (print_string(va_arg(args, char *)));
 	else if (c == 'p')
-		return (print_hexa_adress(va_arg(args, void *)));
+		return (void_to_hexa(va_arg(args, void *)));
 	else if (c == 'd' || c == 'i')
 		return (print_nbr(va_arg(args, int)));
 	else if (c == 'u')
 		return (print_unbr(va_arg(args, unsigned int)));
-	else if (c == 'x')
-		return (print_lowercase_hexa(va_arg(args, int)));
-	else if (c == 'X')
-		return (print_uppercase_hexa(va_arg(args, int)));
+	else if (c == 'x' || c == 'X')
+		return (print_hexa(va_arg(args, int), c));
 	else if (c == '%')
 		return (print_char('%'));
 	return (0);
