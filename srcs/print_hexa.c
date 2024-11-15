@@ -6,29 +6,24 @@
 /*   By: hduflos <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/15 11:10:58 by hduflos           #+#    #+#             */
-/*   Updated: 2024/11/15 14:41:12 by hduflos          ###   ########.fr       */
+/*   Updated: 2024/11/15 16:01:51 by hduflos          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "printf.h"
 
-void	print_lowercase_hexa(unsigned long n, char *base)
+void	print_hexa(unsigned long n, char *base)
 {
 	if (n >= 16)
-		print_lowercase_hexa(n / 16);
-	ft_putchar_fd(base[n % 16], 1);
+		print_hexa(n / 16, base);
+	write(1, &base[n % 16], 1);
 }
 
-int	count_hexa(int n)
+int	count_hexa(unsigned long n)
 {
-	int	count;
+	int count;
 
-	count = 0;
-	if (n < 0)
-	{
-		n = -n;
-		count++;
-	}
+	count = 1;
 	while (n >= 16)
 	{
 		n /= 16;
@@ -37,54 +32,52 @@ int	count_hexa(int n)
 	return (count);
 }
 
-int	print_hexa(int n, char c)
+int	preprint_hexa(int n, char c)
 {
-	int		count;
-	char	*lower_base;
-	char	*upper_base;
+	int count;
+	unsigned long nb;
 
-	lower_base = "0123456789abcdef";
-	upper_base = "0123456789ABCDEF";
+	count = 0;
 	if (n == -2147483648)
 	{
 		write(1, "-80000000", 9);
 		return (9);
 	}
-	count = count_hexa(n);
 	if (n < 0)
 	{
-		n = -n;
-		ft_putchar('-', 1);
+		nb = (unsigned long)(-n);
+		count++;
+		write(1, "-", 1);
 	}
+	else
+	{
+		nb = (unsigned long)n;
+	}
+	count += count_hexa(nb);
 	if (c == 'x')
-		print_hexa((unsigned long)n, lower_base);
-	if (c == 'X')
-		print_hexa((unsigned long)n, upper_base);
+		print_hexa(nb, "0123456789abcdef");
+	else if (c == 'X')
+		print_hexa(nb, "0123456789ABCDEF");
 	return (count);
 }
 
 int	void_to_hexa(void *p)
 {
-	unsigned long	i;
-	int				count;
+	unsigned long i;
+	int count;
 
 	i = (unsigned long)p;
-	count = 1;
-	while (i >= 16)
-	{
-		i /= 16;
-		count++;
-	}
-	i = (unsigned long)p;
-	print_hexa(i, x);
+	write(1, "0x", 2);
+	count = 2 + count_hexa(i);
+	print_hexa(i, "0123456789abcdef");
 	return (count);
 }
 
 /*
-int	main()
-{
-	print_lowercase_hexa(68);
+   int	main()
+   {
+   print_lowercase_hexa(68);
 
-	return (0);
-}
-*/
+   return (0);
+   }
+ */
