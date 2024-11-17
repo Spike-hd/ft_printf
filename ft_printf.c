@@ -6,7 +6,7 @@
 /*   By: hduflos <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/15 08:54:07 by hduflos           #+#    #+#             */
-/*   Updated: 2024/11/15 10:43:12 by hduflos          ###   ########.fr       */
+/*   Updated: 2024/11/16 14:31:31 by hduflos          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,14 +42,17 @@ int	ft_printf(const char *str, ...)
 	count = 0;
 	while (str[i])
 	{
-		if (str[i] == '%')
+		if (str[i] == '%' && str[i + 1] != '\0')
 		{
 			count += format_specifier(str[i + 1], args);
 			i += 2;
 		}
-		write(1, &str[i], 1);
-		count++;
-		i++;
+		else
+		{
+			write(1, &str[i], 1);
+			count++;
+			i++;
+		}
 	}
 	va_end (args);
 	return (count);
